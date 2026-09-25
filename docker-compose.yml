@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  open-iec104-bridge:
+    image: hephario/open-iec104-mqtt:latest
+    # build: .
+    container_name: open-iec104-bridge
+    restart: unless-stopped
+    # Use environment variables for full configuration flexibility
+    environment:
+      - BRIDGE_ID=substation_bridge_01
+      - IEC104_MODE=client
+      - IEC104_IP=10.0.0.50
+      - IEC104_PORT=2404
+      - MQTT_HOST=127.0.0.1
+      - MQTT_PORT=1883
+      - MQTT_QOS=1
+      - MQTT_RETAIN=false
+      - REQUIRE_TRANSACTION_ID=false
+    network_mode: "host"
+

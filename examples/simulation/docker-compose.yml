@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  mqtt-broker:
+    image: eclipse-mosquitto:2
+    container_name: mqtt-broker
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  # This simulates an RTU / Substation PLC that speaks IEC 104 (Server Mode)
+  open-iec104-server-rtu:
+    image: hephario/open-iec104-mqtt:latest
+    # build: ../../
+    container_name: open-iec104-server-rtu
+    environment:
+      - BRIDGE_ID=rtu_sim
+      - IEC104_MODE=server
+      - IEC104_IP=0.0.0.0
+      - IEC104_PORT=2404
+      - MQTT_HOST=mqtt-broker
+      - MQTT_PORT=1883
+    depends_on:
+      - mqtt-broker
+
+  # This simulates the main SCADA app connecting to the RTU (Client Mode)
+  open-iec104-client-scada:
+    image: hephario/open-iec104-mqtt:latest
+    # build: ../../
+    container_name: open-iec104-client-scada
+    environment:
+      - BRIDGE_ID=scada_client
+      - IEC104_MODE=client
+      - IEC104_IP=open-iec104-server-rtu
+      - IEC104_PORT=2404
+      - MQTT_HOST=mqtt-broker
+      - MQTT_PORT=1883
+    depends_on:
+      - mqtt-broker
+      - open-iec104-server-rtu
+
+  # Simulates physical sensors pushing data into the RTU and SCADA triggering actors
+  simulated-sensors:
+    image: alpine
+    container_name: simulated-sensors
+    depends_on:
+      - mqtt-broker
+      - open-iec104-server-rtu
+    volumes:
+      - ./simulate.sh:/simulate.sh
+    command: /bin/sh -c "apk add --no-cache bash && bash /simulate.sh"
+

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Authors>Hephario GmbH</Authors>
+    <Company>Hephario GmbH</Company>
+    <Copyright>Copyright (c) 2026 Hephario GmbH</Copyright>
+    <Description>Open source IEC 60870-5-104 to MQTT bridge.</Description>
+    <RepositoryUrl>https://github.com/hephario/open-iec104-mqtt</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="OpenIec104MqttBridge.Tests\**" />
+    <EmbeddedResource Remove="OpenIec104MqttBridge.Tests\**" />
+    <None Remove="OpenIec104MqttBridge.Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MQTTnet" Version="4.3.3.952" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
+    <!-- Reference for the actual IEC104 lib, e.g. lib60870.NET -->
+    <PackageReference Include="lib60870.net" Version="2.3.0" />
+  </ItemGroup>
+</Project>
