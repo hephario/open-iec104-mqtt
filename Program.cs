@@ -77,7 +77,7 @@ namespace OpenIec104MqttBridge
             var mqttFactory = new MqttFactory();
             mqttClient = mqttFactory.CreateMqttClient();
             
-            var builder = new MqttClientOptionsBuilder()
+            var mqttOptionsBuilder = new MqttClientOptionsBuilder()
                 .WithClientId($"iec104_bridge_{bridgeId}_{Guid.NewGuid()}")
                 .WithTcpServer(mqttHost, mqttPort)
                 .WithProtocolVersion(MQTTnet.Formatter.MqttProtocolVersion.V500)
@@ -87,10 +87,10 @@ namespace OpenIec104MqttBridge
             string? mqttPass = Environment.GetEnvironmentVariable("MQTT_PASSWORD");
             if (!string.IsNullOrEmpty(mqttUser))
             {
-                builder.WithCredentials(mqttUser, mqttPass);
+                mqttOptionsBuilder.WithCredentials(mqttUser, mqttPass);
             }
 
-            var mqttOptions = builder.Build();
+            var mqttOptions = mqttOptionsBuilder.Build();
 
             mqttClient.ApplicationMessageReceivedAsync += async e =>
             {

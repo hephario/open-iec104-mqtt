@@ -23,6 +23,7 @@ Configure entirely via environment variables (see `docker-compose.yml`):
 - `IEC104_MODE`: `client` or `server`
 - `IEC104_IP`: IP to connect or bind to
 - `MQTT_HOST`: Broker IP
+- `MQTT_USERNAME` / `MQTT_PASSWORD`: Broker credentials (optional; omit for anonymous)
 - `MQTT_QOS`: 0, 1, or 2 (supports MQTTv5)
 - `MQTT_RETAIN`: true or false
 - `REQUIRE_TRANSACTION_ID`: `true` or `false` (If true, rejects commands without a `transaction_id`)
